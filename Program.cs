@@ -30,14 +30,4 @@ app.MapControllerRoute(
     pattern: "about-us",
     defaults: new { controller = "Home", action = "Privacy" });
 
-app.MapControllerRoute(
-    name: "userProfile",
-    pattern: "user/{username}/{action=Profile}",
-    defaults: new { controller = "Demo" });
-
-app.MapControllerRoute(
-    name: "product",
-    pattern: "product/{id:int}",
-    defaults: new { controller = "Demo", action = "ProductDetails" });
-
 app.Run();
