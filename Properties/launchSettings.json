@@ -36,6 +36,15 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
+    },
+    "BankAccounts": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "BankAccounts/",
+      "applicationUrl": "https://localhost:7236",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
     }
   }
 }
