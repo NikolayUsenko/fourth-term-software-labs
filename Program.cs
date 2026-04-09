@@ -7,6 +7,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IProductRepository, InMemoryProductRepository>();
 
+builder.Services.AddScoped<IBankAccountRepository, InMemoryBankAccountRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,5 +30,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
 
 app.Run();
