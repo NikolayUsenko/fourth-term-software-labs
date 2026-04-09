@@ -1,7 +1,11 @@
+using fourth_term_software_labs.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IProductRepository, InMemoryProductRepository>();
 
 var app = builder.Build();
 
@@ -24,10 +28,5 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
-app.MapControllerRoute(
-    name: "about",
-    pattern: "about-us",
-    defaults: new { controller = "Home", action = "Privacy" });
 
 app.Run();
