@@ -1,0 +1,71 @@
+﻿﻿@{
+ViewData["Title"] = ViewBag.PageTitle;
+}
+
+<div class="game-details">
+    <div class="game-header">
+        <h1>@ViewBag.GameTitle</h1>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="game-description card mb-4">
+                <div class="card-header">
+                    <h3>Об игре</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled">
+                        <li><strong>Название:</strong> @ViewBag.GameTitle</li>
+                        <li><strong>Жанр:</strong> @ViewBag.Genre</li>
+                        <li><strong>Рейтинг:</strong> @ViewBag.Rating / 5.0</li>
+                        <li><strong>Платформы:</strong> @ViewBag.Platforms</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="system-requirements card">
+                <div class="card-header">
+                    <h3>Системные требования</h3>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Компонент</th>
+                            <th>Минимальные требования</th>
+                        </tr>
+                        @foreach (var requirement in ViewBag.SystemRequirements)
+                        {
+                            <tr>
+                                <td><strong>@requirement.Key</strong></td>
+                                <td>@requirement.Value</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation-links mt-4">
+        <a href="/gaming/games" class="btn btn-secondary">← К списку игр</a>
+    </div>
+</div>
+
+<style>
+    .game-header {
+        margin-bottom: 30px;
+        padding: 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 10px;
+    }
+
+    .system-requirements .table {
+        margin-bottom: 0;
+    }
+
+    .system-requirements th {
+        background: #f8f9fa;
+        width: 30%;
+    }
+</style>
