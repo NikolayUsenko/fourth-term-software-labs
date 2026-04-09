@@ -1,0 +1,73 @@
+﻿@model fourth_term_software_labs.Models.BankAccount
+
+@{
+    ViewData["Title"] = "Детали счета";
+}
+
+<h1>Детали банковского счета</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Id)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Id)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AccountNumber)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.AccountNumber)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OwnerName)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.OwnerName)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Balance)</dt>
+        <dd class="col-sm-9">@Model.Balance.ToString("N2") @Model.Currency</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Currency)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.Currency)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.OpenDate)</dt>
+        <dd class="col-sm-9">@Html.DisplayFor(model => model.OpenDate)</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.InterestRate)</dt>
+        <dd class="col-sm-9">@Model.InterestRate%</dd>
+
+        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsActive)</dt>
+        <dd class="col-sm-9">
+            @if (Model.IsActive)
+            {
+                <span class="badge bg-success">Активен</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">Закрыт</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Расчет процентов</h5>
+            </div>
+            <div class="card-body">
+                <p>Текущий баланс: <strong>@Model.Balance.ToString("N2") @Model.Currency</strong></p>
+                <p>Ставка: <strong>@Model.InterestRate%</strong></p>
+                <p>Начислено процентов: <strong class="text-success">@Model.CalculateInterest().ToString("N2") @Model.Currency</strong></p>
+                <p>Возраст счета: <strong>@Model.GetAccountAgeInYears() лет</strong></p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>Действия</h5>
+            </div>
+            <div class="card-body">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Редактировать</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Закрыть счет</a>
+                <a asp-action="Index" class="btn btn-secondary">Назад к списку</a>
+            </div>
+        </div>
+    </div>
+</div>

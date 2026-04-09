@@ -1,0 +1,69 @@
+﻿@model IEnumerable<fourth_term_software_labs.Models.BankAccount>
+
+@{
+    ViewData["Title"] = "Управление банковскими счетами";
+    string? filter = ViewBag.Filter as string;
+}
+
+<h1>@(filter ?? "Управление банковскими счетами")</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Открыть новый счет</a>
+    <a asp-action="Active" class="btn btn-success">Активные счета</a>
+    <a asp-action="Currency" asp-route-currency="RUB" class="btn btn-info">RUB</a>
+    <a asp-action="Currency" asp-route-currency="USD" class="btn btn-info">USD</a>
+    <a asp-action="Currency" asp-route-currency="EUR" class="btn btn-info">EUR</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.AccountNumber)</th>
+            <th>@Html.DisplayNameFor(model => model.OwnerName)</th>
+            <th>@Html.DisplayNameFor(model => model.Balance)</th>
+            <th>@Html.DisplayNameFor(model => model.Currency)</th>
+            <th>@Html.DisplayNameFor(model => model.OpenDate)</th>
+            <th>@Html.DisplayNameFor(model => model.InterestRate)</th>
+            <th>@Html.DisplayNameFor(model => model.IsActive)</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.AccountNumber</td>
+                <td>@item.OwnerName</td>
+                <td>@item.Balance.ToString("N2") @item.Currency</td>
+                <td>@item.Currency</td>
+                <td>@item.OpenDate.ToShortDateString()</td>
+                <td>@item.InterestRate%</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success">Да</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Нет</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Детали</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Изменить</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Закрыть</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
