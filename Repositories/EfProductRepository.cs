@@ -1,6 +1,5 @@
 ﻿using fourth_term_software_labs.Data;
 using fourth_term_software_labs.Models;
-using fourth_term_software_labs.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace fourth_term_software_labs.Repositories
