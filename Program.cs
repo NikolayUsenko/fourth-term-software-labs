@@ -13,7 +13,7 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 .EnableSensitiveDataLogging()
 );
 
-builder.Services.AddScoped<IProductRepository, InMemoryProductRepository>();
+builder.Services.AddScoped<IProductRepository, EfProductRepository>();
 
 builder.Services.AddScoped<IBankAccountRepository, InMemoryBankAccountRepository>();
 
