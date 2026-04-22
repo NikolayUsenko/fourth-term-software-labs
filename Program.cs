@@ -13,9 +13,15 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectio
 .EnableSensitiveDataLogging()
 );
 
+builder.Services.AddDbContext<BankDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .LogTo(Console.WriteLine, LogLevel.Information)
+    .EnableSensitiveDataLogging()
+);
+
 builder.Services.AddScoped<IProductRepository, EfProductRepository>();
 
-builder.Services.AddScoped<IBankAccountRepository, InMemoryBankAccountRepository>();
+builder.Services.AddScoped<IBankAccountRepository, EFBankAccountRepository>();
 
 var app = builder.Build();
 
