@@ -32,6 +32,38 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="BankAccounts" asp-action="Index">Банковские счета</a>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-
+                                   toggle="dropdown">
+                                LINQ-запросы
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Products" asp-
+                                       action="ByPrice">Фильтр по цене</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Products" asp-
+                                       action="TopExpensive">Топ дорогих</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Products" asp-
+                                       action="Search">Поиск</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Products" asp-
+                                       action="GroupedByCategory">По категориям</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Products" asp-
+                                       action="Statistics">Статистика</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="Products" asp-
+                                       action="Paginated">Пагинация</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>
