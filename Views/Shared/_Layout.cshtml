@@ -57,6 +57,21 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                LINQ-запросы
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-controller="BankAccounts" asp-action="ByBalance">Фильтр по балансу</a></li>
+                                <li><a class="dropdown-item" asp-controller="BankAccounts" asp-action="TopRichest">Топ богатых</a></li>
+                                <li><a class="dropdown-item" asp-controller="BankAccounts" asp-action="Search">Поиск</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" asp-controller="BankAccounts" asp-action="GroupedByCurrency">По валютам (группировка)</a></li>
+                                <li><a class="dropdown-item" asp-controller="BankAccounts" asp-action="Statistics">Статистика</a></li>
+                                <li><a class="dropdown-item" asp-controller="BankAccounts" asp-action="Paginated">Пагинация</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
             </div>

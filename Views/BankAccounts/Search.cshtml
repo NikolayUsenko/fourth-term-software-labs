@@ -1,0 +1,57 @@
+﻿@model IEnumerable<fourth_term_software_labs.Models.BankAccount>
+
+@{
+    ViewData["Title"] = ViewBag.Title;
+}
+
+<h1>Поиск банковских счетов</h1>
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-auto flex-grow-1">
+        <input type="text" name="term" class="form-control"
+               placeholder="Введите имя владельца или номер счета..."
+               value="@ViewBag.SearchTerm">
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-primary">Найти</button>
+        <a asp-action="Index" class="btn btn-secondary">Сбросить</a>
+    </div>
+</form>
+
+@if (!string.IsNullOrWhiteSpace(ViewBag.SearchTerm) && !Model.Any())
+{
+    <div class="alert alert-info">По запросу "@ViewBag.SearchTerm" ничего не найдено</div>
+}
+
+@if (Model.Any())
+{
+    <div class="alert alert-success">Найдено счетов: @ViewBag.Count</div>
+
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.OwnerName</h5>
+                        <p class="card-text text-muted">Счет: @item.AccountNumber</p>
+                        <p class="card-text">Баланс: <strong>@item.Balance.ToString("N2") @item.Currency</strong></p>
+                        <p class="card-text">
+                            Статус: @if (item.IsActive)
+                            {
+                                <span class="badge bg-success">Активен</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Неактивен</span>
+                            }
+                        </p>
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-primary">
+                            Подробнее
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

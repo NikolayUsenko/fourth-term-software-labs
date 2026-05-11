@@ -1,0 +1,75 @@
+﻿@model fourth_term_software_labs.Models.BankAccountsStatisticsViewModel
+
+@{
+    ViewData["Title"] = "Статистика банковских счетов";
+}
+
+<h1>Статистика банковских счетов</h1>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Всего счетов</h5>
+                <p class="card-text display-4">@Model.TotalCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Активных счетов</h5>
+                <p class="card-text display-4">@Model.ActiveCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Средний баланс</h5>
+                <p class="card-text display-4">@Model.AverageBalance.ToString("C")</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Диапазон балансов</h5>
+                <p class="card-text">
+                    от @Model.BalanceRange.MinBalance.ToString("C")<br>
+                    до @Model.BalanceRange.MaxBalance.ToString("C")
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2>Статистика по валютам</h2>
+
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Валюта</th>
+            <th>Количество счетов</th>
+            <th>Общая сумма</th>
+            <th>Средний баланс</th>
+            <th>Мин. баланс</th>
+            <th>Макс. баланс</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var currency in Model.Currencies)
+        {
+            <tr>
+                <td><strong>@currency.Currency</strong></td>
+                <td>@currency.Count</td>
+                <td>@currency.TotalBalance.ToString("N2")</td>
+                <td>@currency.AverageBalance.ToString("C")</td>
+                <td>@currency.MinBalance.ToString("C")</td>
+                <td>@currency.MaxBalance.ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Index" class="btn btn-secondary">Назад к списку</a>

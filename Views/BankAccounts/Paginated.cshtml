@@ -1,0 +1,103 @@
+﻿@model IEnumerable<fourth_term_software_labs.Models.BankAccount>
+
+@{
+    ViewData["Title"] = "Счета (пагинация)";
+}
+
+<h1>Банковские счета (пагинация)</h1>
+
+<p>Страница @ViewBag.CurrentPage из @ViewBag.TotalPages</p>
+
+<div class="row mb-3">
+    <div class="col-auto">
+        <label class="form-label">Размер страницы:</label>
+        <select id="pageSizeSelect" class="form-select" style="width: auto;">
+            <option value="5" selected="@(ViewBag.PageSize == 5)">5</option>
+            <option value="10" selected="@(ViewBag.PageSize == 10)">10</option>
+            <option value="20" selected="@(ViewBag.PageSize == 20)">20</option>
+            <option value="50" selected="@(ViewBag.PageSize == 50)">50</option>
+        </select>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Номер счета</th>
+            <th>Владелец</th>
+            <th>Баланс</th>
+            <th>Валюта</th>
+            <th>Статус</th>
+            <th>Действия</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.AccountNumber</td>
+                <td>@item.OwnerName</td>
+                <td>@item.Balance.ToString("N2")</td>
+                <td>@item.Currency</td>
+                <td>
+                    @if (item.IsActive)
+                    {
+                        <span class="badge bg-success">Активен</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Неактивен</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Детали</a>
+                 </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+        @if (ViewBag.HasPreviousPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Paginated" asp-route-page="@(ViewBag.CurrentPage - 1)" asp-route-pageSize="@ViewBag.PageSize">Назад</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Назад</span>
+            </li>
+        }
+
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                <a class="page-link" asp-action="Paginated" asp-route-page="@i" asp-route-pageSize="@ViewBag.PageSize">@i</a>
+            </li>
+        }
+
+        @if (ViewBag.HasNextPage)
+        {
+            <li class="page-item">
+                <a class="page-link" asp-action="Paginated" asp-route-page="@(ViewBag.CurrentPage + 1)" asp-route-pageSize="@ViewBag.PageSize">Вперед</a>
+            </li>
+        }
+        else
+        {
+            <li class="page-item disabled">
+                <span class="page-link">Вперед</span>
+            </li>
+        }
+    </ul>
+</nav>
+
+<a asp-action="Index" class="btn btn-secondary">Назад к списку</a>
+
+<script>
+    document.getElementById('pageSizeSelect').addEventListener('change', function() {
+        window.location.href = '@Url.Action("Paginated")' + '?page=1&pageSize=' + this.value;
+    });
+</script>
