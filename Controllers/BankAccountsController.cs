@@ -13,14 +13,13 @@ namespace fourth_term_software_labs.Controllers
             _repository = repository;
         }
 
-        // GET: /BankAccounts
+        // Существующие методы...
         public IActionResult Index()
         {
             var accounts = _repository.GetAll();
             return View(accounts);
         }
 
-        // GET: /BankAccounts/Details/5
         public IActionResult Details(int id)
         {
             var account = _repository.GetById(id);
@@ -29,18 +28,15 @@ namespace fourth_term_software_labs.Controllers
             return View(account);
         }
 
-        // GET: /BankAccounts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: /BankAccounts/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(BankAccount account)
         {
-            // Дополнительная проверка: номер счета должен быть уникальным
             if (_repository.GetByAccountNumber(account.AccountNumber) != null)
             {
                 ModelState.AddModelError(nameof(account.AccountNumber), "Счет с таким номером уже существует.");
@@ -55,7 +51,6 @@ namespace fourth_term_software_labs.Controllers
             return View(account);
         }
 
-        // GET: /BankAccounts/Edit/5
         public IActionResult Edit(int id)
         {
             var account = _repository.GetById(id);
@@ -64,7 +59,6 @@ namespace fourth_term_software_labs.Controllers
             return View(account);
         }
 
-        // POST: /BankAccounts/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, BankAccount account)
@@ -88,7 +82,6 @@ namespace fourth_term_software_labs.Controllers
             return View(account);
         }
 
-        // GET: /BankAccounts/Delete/5
         public IActionResult Delete(int id)
         {
             var account = _repository.GetById(id);
@@ -97,7 +90,6 @@ namespace fourth_term_software_labs.Controllers
             return View(account);
         }
 
-        // POST: /BankAccounts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -107,7 +99,6 @@ namespace fourth_term_software_labs.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /BankAccounts/Active
         public IActionResult Active()
         {
             var accounts = _repository.GetActiveAccounts();
@@ -115,12 +106,99 @@ namespace fourth_term_software_labs.Controllers
             return View("Index", accounts);
         }
 
-        // GET: /BankAccounts/Currency/RUB
         public IActionResult Currency(string currency)
         {
             var accounts = _repository.GetByCurrency(currency);
             ViewBag.Filter = $"Счета в валюте {currency}";
             return View("Index", accounts);
+        }
+
+        // ========== НОВЫЕ LINQ-МЕТОДЫ ==========
+
+        // 1. Фильтрация по балансу
+        // GET: /BankAccounts/ByBalance?min=1000&max=50000
+        public IActionResult ByBalance(decimal min, decimal max)
+        {
+            var accounts = _repository.GetAccountsByBalanceRange(min, max);
+            ViewBag.MinBalance = min;
+            ViewBag.MaxBalance = max;
+            ViewBag.Title = $"Счета с балансом от {min:C} до {max:C}";
+            ViewBag.Count = accounts.Count();
+            return View(accounts);
+        }
+
+        // 2. Топ богатых счетов
+        // GET: /BankAccounts/TopRichest?count=5
+        public IActionResult TopRichest(int count = 5)
+        {
+            var accounts = _repository.GetTopRichestAccounts(count);
+            ViewBag.Title = $"Топ {count} самых богатых счетов";
+            ViewBag.Count = count;
+            return View(accounts);
+        }
+
+        // 3. Поиск
+        // GET: /BankAccounts/Search?term=Иванов
+        public IActionResult Search(string term)
+        {
+            if (string.IsNullOrWhiteSpace(term))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            var accounts = _repository.SearchAccounts(term);
+            ViewBag.SearchTerm = term;
+            ViewBag.Title = $"Результаты поиска: {term}";
+            ViewBag.Count = accounts.Count();
+            return View(accounts);
+        }
+
+        // 4. Статистика
+        // GET: /BankAccounts/Statistics
+        public IActionResult Statistics()
+        {
+            var stats = new BankAccountsStatisticsViewModel
+            {
+                TotalCount = _repository.GetTotalCount(),
+                AverageBalance = _repository.GetAverageBalance(),
+                ActiveCount = _repository.GetActiveAccounts().Count(),
+                BalanceRange = _repository.GetBalanceRange(),
+                Currencies = _repository.GetAccountsGroupedByCurrency()
+                    .Select(g => new CurrencyStatViewModel
+                    {
+                        Currency = g.Key,
+                        Count = g.Count(),
+                        TotalBalance = g.Sum(a => a.Balance),
+                        AverageBalance = g.Average(a => a.Balance),
+                        MinBalance = g.Min(a => a.Balance),
+                        MaxBalance = g.Max(a => a.Balance)
+                    }).OrderBy(c => c.Currency)
+            };
+            return View(stats);
+        }
+
+        // 5. Группировка по валюте
+        // GET: /BankAccounts/GroupedByCurrency
+        public IActionResult GroupedByCurrency()
+        {
+            var groups = _repository.GetAccountsGroupedByCurrency();
+            return View(groups);
+        }
+
+        // 6. Пагинация
+        // GET: /BankAccounts/Paginated?page=1
+        public IActionResult Paginated(int page = 1, int pageSize = 5)
+        {
+            var accounts = _repository.GetAccountsWithPagination(page, pageSize);
+            var totalPages = _repository.GetTotalPages(pageSize);
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.HasPreviousPage = page > 1;
+            ViewBag.HasNextPage = page < totalPages;
+
+            return View(accounts);
         }
     }
 }
